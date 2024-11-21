@@ -53,6 +53,7 @@ def lit_test_suite(
         tags_override = None,
         hermetic_cuda_data_dir = None,
         tags = [],
+        exec_properties = {},
         **kwargs):
     """Creates one lit test per source file and a test suite that bundles them.
 
@@ -77,9 +78,11 @@ def lit_test_suite(
       timeout: timeout argument passed to the individual tests.
       default_tags: string list. Tags applied to all tests.
       tags_override: string_dict. Tags applied in addition to only select tests.
-      tags: string list. Tags applied to all tests and the test suite.
       hermetic_cuda_data_dir: string. If set, the tests will be run with a
         `--xla_gpu_cuda_data_dir` flag set to the hermetic CUDA data directory.
+      tags: string list. Tags applied to all tests and the test suite.
+      exec_properties: string_dict. Properties to pass to the test rule, e.g.
+        requirement to run on a GPU.
       **kwargs: additional keyword arguments to pass to all generated rules.
 
     See https://llvm.org/docs/CommandGuide/lit.html for details on lit
@@ -112,6 +115,7 @@ def lit_test_suite(
             timeout = timeout,
             tags = tags + default_tags + tags_override.get(test_file, []),
             hermetic_cuda_data_dir = hermetic_cuda_data_dir,
+            exec_properties = exec_properties,
             **kwargs
         )
 
@@ -150,6 +154,7 @@ def lit_test(
         env = None,
         timeout = None,
         hermetic_cuda_data_dir = None,
+        exec_properties = {},
         **kwargs):
     """Runs a single test file with LLVM's lit tool.
 
@@ -174,6 +179,8 @@ def lit_test(
       timeout: bazel test timeout string, as per common bazel definitions.
       hermetic_cuda_data_dir: string. If set, the tests will be run with a
         `--xla_gpu_cuda_data_dir` flag set to the hermetic CUDA data directory.
+      exec_properties: string_dict. Properties to pass to the test rule, e.g.
+        requirement to run on a GPU.
       **kwargs: additional keyword arguments to pass to all generated rules.
 
     See https://llvm.org/docs/CommandGuide/lit.html for details on lit
@@ -270,6 +277,7 @@ def lit_test(
         visibility = visibility,
         env = env,
         timeout = timeout,
+        exec_properties = exec_properties,
         **kwargs
     )
 
